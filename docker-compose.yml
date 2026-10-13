@@ -1,0 +1,19 @@
+services:
+  watch:
+    build: .
+    image: watchlog:latest
+    # Контейнер запускается на время одной команды, поэтому его запускают через run:
+    #   docker compose run --rm watch list
+    # или короче — через скрипт ./watch
+    user: "${WATCH_UID:-1000}:${WATCH_GID:-1000}"
+    environment:
+      - TMDB_API_KEY=${TMDB_API_KEY:-}
+      - WATCH_LANG=${WATCH_LANG:-ru-RU}
+      # Если TMDB недоступен напрямую, укажите прокси в .env как WATCH_PROXY
+      # (отдельное имя, чтобы случайно не подхватить прокси вашей оболочки)
+      - HTTPS_PROXY=${WATCH_PROXY:-}
+    volumes:
+      # База лежит в ./data/watch.db на вашем компьютере — удобно копировать и синхронизировать
+      - ./data:/data
+    stdin_open: true
+    tty: true

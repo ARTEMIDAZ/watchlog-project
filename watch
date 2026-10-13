@@ -1,0 +1,5 @@
+#!/bin/sh
+# Запуск трекера в Docker одной короткой командой:  ./watch list -s watching
+cd "$(dirname "$0")" || exit 1
+mkdir -p data   # создаём сами, иначе Docker создаст папку от имени root
+exec docker compose run --rm watch "$@"
